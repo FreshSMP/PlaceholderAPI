@@ -20,6 +20,7 @@
 
 package me.clip.placeholderapi;
 
+import com.tcoded.folialib.FoliaLib;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -54,6 +55,7 @@ public final class PlaceholderAPIPlugin extends JavaPlugin {
   @NotNull
   private static final Version VERSION;
   private static PlaceholderAPIPlugin instance;
+  private static FoliaLib foliaLib;
 
   static {
     String version = Bukkit.getServer().getBukkitVersion().split("-")[0];
@@ -102,6 +104,15 @@ public final class PlaceholderAPIPlugin extends JavaPlugin {
   }
 
   /**
+   * Get the static instance of the FoliaLib class
+   *
+   * @return FoliaLib instance
+   */
+  public static FoliaLib getFoliaLib() {
+    return foliaLib;
+  }
+
+  /**
    * Get the configurable {@linkplain String} value that should be returned when a boolean is true
    *
    * @return string value of true
@@ -146,6 +157,7 @@ public final class PlaceholderAPIPlugin extends JavaPlugin {
   @Override
   public void onLoad() {
     instance = this;
+    foliaLib = new FoliaLib(this);
 
     saveDefaultConfig();
   }
@@ -174,7 +186,7 @@ public final class PlaceholderAPIPlugin extends JavaPlugin {
 
     HandlerList.unregisterAll(this);
 
-    Bukkit.getScheduler().cancelTasks(this);
+    foliaLib.getImpl().cancelAllTasks();
 
     adventure.close();
     adventure = null;
